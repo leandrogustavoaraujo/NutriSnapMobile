@@ -1,30 +1,61 @@
 {
   "expo": {
-    "name": "NutriSnapMobile",
-    "slug": "NutriSnapMobile",
+    "name": "NutriSnap",
+    "slug": "nutrisnap",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "nutrisnap",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#070A12"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.nutrisnap.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "O NutriSnap usa a câmera para fotografar refeições e gerar análise nutricional.",
+        "NSPhotoLibraryUsageDescription": "O NutriSnap usa sua galeria para selecionar fotos de refeições.",
+        "NSPhotoLibraryAddUsageDescription": "O NutriSnap pode acessar imagens escolhidas para análise nutricional."
+      }
     },
     "android": {
+      "package": "com.nutrisnap.app",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#070A12"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O NutriSnap usa sua galeria para selecionar fotos de refeições.",
+          "cameraPermission": "O NutriSnap usa a câmera para fotografar refeições e gerar análise nutricional."
+        }
+      ]
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "aae7caf4-05b7-42bd-b171-68d235a5c619"
+      }
     }
   }
 }
