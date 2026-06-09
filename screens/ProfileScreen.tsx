@@ -338,8 +338,8 @@ export default function ProfileScreen({ navigation }: any) {
 
             <Text style={styles.planText}>
               {plan === 'premium'
-                ? 'Você tem acesso liberado à análise nutricional automática por foto e ao acompanhamento alimentar.'
-                : 'Assine o Premium para liberar a análise nutricional automática por foto e usar o NutriSnap no dia a dia.'}
+                ? 'Você tem acesso à análise nutricional por foto e ao acompanhamento alimentar.'
+                : 'Assine o Premium para acessar a análise nutricional por foto e usar o NutriSnap no dia a dia.'}
             </Text>
 
             <View style={styles.planStats}>
@@ -352,7 +352,7 @@ export default function ProfileScreen({ navigation }: any) {
 
               <View style={styles.planStatItem}>
                 <Text style={styles.planStatValue}>
-                  {plan === 'premium' ? 'Liberado' : 'Premium'}
+                  {plan === 'premium' ? 'Ativo' : 'Premium'}
                 </Text>
                 <Text style={styles.planStatLabel}>acesso</Text>
               </View>

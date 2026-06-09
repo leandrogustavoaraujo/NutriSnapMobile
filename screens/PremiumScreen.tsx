@@ -41,13 +41,13 @@ export default function PremiumScreen({ navigation }: any) {
 
       setPlan(profile?.plan || 'free');
     } catch (error) {
-      console.log('Erro ao carregar Premium:', error);
+      console.log('Erro ao carregar premium:', error);
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleSubscribe() {
+  async function handleActivatePremiumMock() {
     try {
       const auth = getAuth();
       const user = auth.currentUser;
@@ -62,7 +62,7 @@ export default function PremiumScreen({ navigation }: any) {
 
       Alert.alert(
         'Premium ativado',
-        'Seu acesso Premium foi liberado.',
+        'Seu acesso Premium foi iniciado.',
         [
           {
             text: 'Começar agora',
@@ -71,13 +71,13 @@ export default function PremiumScreen({ navigation }: any) {
         ]
       );
     } catch (error) {
-      console.log('Erro ao ativar Premium:', error);
+      console.log('Erro ao ativar premium:', error);
 
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
 
       Alert.alert(
         'Erro',
-        'Não foi possível liberar o Premium agora.'
+        'Não foi possível ativar o Premium agora.'
       );
     } finally {
       setActivating(false);
@@ -94,13 +94,6 @@ export default function PremiumScreen({ navigation }: any) {
           style: 'cancel',
         },
       ]
-    );
-  }
-
-  function showDisclaimer() {
-    Alert.alert(
-      'Aviso importante',
-      'As análises e metas do NutriSnap são estimativas para acompanhamento alimentar e não substituem orientação profissional individualizada.'
     );
   }
 
@@ -121,35 +114,19 @@ export default function PremiumScreen({ navigation }: any) {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {plan === 'premium' && (
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.replace('MainTabs')}
-            activeOpacity={0.82}
-          >
-            <Ionicons name="chevron-back" size={24} color="#F8FAFC" />
-          </TouchableOpacity>
-        )}
-
         <View style={styles.hero}>
           <View style={styles.iconHero}>
             <Ionicons name="diamond-outline" size={44} color="#07110B" />
           </View>
 
-          <Text style={styles.kicker}>
-            {plan === 'premium' ? 'Premium ativo' : 'Configuração concluída'}
-          </Text>
+          <Text style={styles.kicker}>Configuração concluída</Text>
 
           <Text style={styles.title}>
-            {plan === 'premium'
-              ? 'Seu acompanhamento está liberado'
-              : 'Assine para liberar suas análises por foto'}
+            Assine para acessar suas análises por foto
           </Text>
 
           <Text style={styles.subtitle}>
-            {plan === 'premium'
-              ? 'Você já pode analisar refeições, salvar seu histórico e acompanhar suas metas diariamente.'
-              : 'Suas metas já foram configuradas. Para usar o NutriSnap no dia a dia, libere a análise nutricional automática por foto.'}
+            Suas metas já foram calculadas. Para usar o NutriSnap no dia a dia e analisar refeições por foto, assine o Premium.
           </Text>
         </View>
 
@@ -169,7 +146,7 @@ export default function PremiumScreen({ navigation }: any) {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Premium libera</Text>
+          <Text style={styles.cardTitle}>Premium inclui</Text>
 
           <PremiumItem
             icon="camera-outline"
@@ -206,33 +183,37 @@ export default function PremiumScreen({ navigation }: any) {
           </View>
 
           <Text style={styles.priceDescription}>
-            Libere o acompanhamento alimentar visual com análise nutricional por foto.
+            Assinatura mensal para acesso ao acompanhamento alimentar visual com análise nutricional por foto.
           </Text>
         </View>
 
         <TouchableOpacity
           style={[styles.primaryButton, activating && styles.buttonDisabled]}
-          onPress={plan === 'premium' ? () => navigation.replace('MainTabs') : handleSubscribe}
+          onPress={handleActivatePremiumMock}
           activeOpacity={0.88}
-          disabled={activating}
+          disabled={activating || plan === 'premium'}
         >
           {activating ? (
             <ActivityIndicator color="#07110B" />
           ) : (
             <>
-              <Ionicons
-                name={plan === 'premium' ? 'restaurant' : 'diamond'}
-                size={21}
-                color="#07110B"
-              />
+              <Ionicons name="diamond" size={21} color="#07110B" />
               <Text style={styles.primaryButtonText}>
-                {plan === 'premium' ? 'Entrar no app' : 'Assinar Premium'}
+                {plan === 'premium' ? 'Premium ativo' : 'Assinar Premium'}
               </Text>
             </>
           )}
         </TouchableOpacity>
 
-        {plan !== 'premium' && (
+        {plan === 'premium' ? (
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={() => navigation.replace('MainTabs')}
+            activeOpacity={0.82}
+          >
+            <Text style={styles.secondaryButtonText}>Entrar no app</Text>
+          </TouchableOpacity>
+        ) : (
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={handleContinueWithoutPremium}
@@ -241,15 +222,6 @@ export default function PremiumScreen({ navigation }: any) {
             <Text style={styles.secondaryButtonText}>Continuar sem assinar</Text>
           </TouchableOpacity>
         )}
-
-        <TouchableOpacity
-          style={styles.disclaimerButton}
-          onPress={showDisclaimer}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="information-circle-outline" size={18} color="#64748B" />
-          <Text style={styles.disclaimerText}>Aviso nutricional</Text>
-        </TouchableOpacity>
       </ScrollView>
     </LinearGradient>
   );
@@ -298,20 +270,8 @@ const styles = StyleSheet.create({
 
   content: {
     paddingHorizontal: 22,
-    paddingTop: 60,
+    paddingTop: 68,
     paddingBottom: 60,
-  },
-
-  backButton: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
-    backgroundColor: '#111827',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#263244',
-    marginBottom: 24,
   },
 
   hero: {
@@ -521,20 +481,6 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     color: '#94A3B8',
     fontSize: 15,
-    fontWeight: '800',
-  },
-
-  disclaimerButton: {
-    marginTop: 18,
-    alignSelf: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-
-  disclaimerText: {
-    color: '#64748B',
-    fontSize: 13,
     fontWeight: '800',
   },
 });
